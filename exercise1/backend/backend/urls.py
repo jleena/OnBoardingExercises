@@ -16,7 +16,10 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
+import Location.views as location_views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('api/bulk-insert/', location_views.BulkInsertView.as_view(), name='bulk_insert'),
+    path('api/insert/', location_views.InsertOne.as_view(), name='insert_one'),
 ]

@@ -37,6 +37,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'Location',
 ]
 
 MIDDLEWARE = [
@@ -81,8 +82,8 @@ WSGI_APPLICATION = 'backend.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'exercise1DB',
-        'USER': 'myuser',
+        'NAME': 'exercise1db',
+        'USER': 'myuser2',
         'PASSWORD': '123,456kk',
         'HOST': 'localhost',
         'PORT': '5432',

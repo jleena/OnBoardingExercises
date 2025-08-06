@@ -1,0 +1,46 @@
+[
+  {
+    "country": {
+      "country_name": "India",
+      "country_code": "IN",
+      "curr_symbol": "₹",
+      "country_phone_code": "+91"
+    },
+    "state": {
+      "state_name": "Karnataka",
+      "state_code": "KA",
+      "gst_code": "29"
+    },
+    "city": {
+      "city_name": "Bengaluru",
+      "city_code": "BLR",
+      "city_phone_code": "+91",
+      "population": 8000000,
+      "avg_age": 29.5,
+      "num_of_adult_males": 4000000,
+      "num_of_adult_females": 4000000
+    }
+  },
+  {
+    "country": {
+      "country_name": "India",
+      "country_code": "IN",
+      "curr_symbol": "₹",
+      "country_phone_code": "+91"
+    },
+    "state": {
+      "state_name": "Tamil Nadu",
+      "state_code": "TN",
+      "gst_code": "33"
+    },
+    "city": {
+      "city_name": "Chennai",
+      "city_code": "CHN",
+      "city_phone_code": "+91",
+      "population": 6000000,
+      "avg_age": 30.0,
+      "num_of_adult_males": 3000000,
+      "num_of_adult_females": 3000000
+    }
+  }
+]
