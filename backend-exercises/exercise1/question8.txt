@@ -1,0 +1,14 @@
+PS C:\Users\LeenaSanjanaJulakant\Documents\projects\onboardingExercises\backend-exercises\exercise1\backend> python manage.py shell
+9 objects imported automatically (use -v 2 for details).
+
+Python 3.13.5 (tags/v3.13.5:6cb20a2, Jun 11 2025, 16:15:46) [MSC v.1943 64 bit (AMD64)] on win32
+Type "help", "copyright", "credits" or "license" for more information.
+(InteractiveConsole)
+>>> max_pop_city = City.objects.all().filter(state__country__name="USA").order_by("-population").first()  
+>>> max_pop_city
+<City: Los Angeles (LA) in California, USA>
+>>> min_pop_city = City.objects.all().filter(state__country__name="India").order_by("population").first() 
+>>> min_pop_city = City.objects.all().filter(state__country__name="USA").order_by("population").first()   
+>>> min_pop_city
+<City: San Francisco (SF) in California, USA>
+>>>

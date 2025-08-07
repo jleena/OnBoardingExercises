@@ -1,0 +1,13 @@
+PS C:\Users\LeenaSanjanaJulakant\Documents\projects\onboardingExercises\backend-exercises\exercise1\backend> python manage.py shell
+9 objects imported automatically (use -v 2 for details).
+
+Python 3.13.5 (tags/v3.13.5:6cb20a2, Jun 11 2025, 16:15:46) [MSC v.1943 64 bit (AMD64)] on win32
+Type "help", "copyright", "credits" or "license" for more information.
+(InteractiveConsole)
+>>> state = State.objects.get(name="California")
+>>> state
+<State: California (CA) in USA>
+>>> cities_in_state = City.objects.all().filter(state=state)
+>>> cities_in_state
+<QuerySet [<City: Los Angeles (LA) in California, USA>, <City: San Francisco (SF) in California, USA>]>
+>>> 

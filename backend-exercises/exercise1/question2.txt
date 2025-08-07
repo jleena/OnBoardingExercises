@@ -1,0 +1,40 @@
+PS C:\Users\LeenaSanjanaJulakant\Documents\projects\onboardingExercises\backend-exercises\exercise1\backend> python manage.py shell
+9 objects imported automatically (use -v 2 for details).
+
+Python 3.13.5 (tags/v3.13.5:6cb20a2, Jun 11 2025, 16:15:46) [MSC v.1943 64 bit (AMD64)] on win32
+Type "help", "copyright", "credits" or "license" for more information.
+(InteractiveConsole)
+>>> from Locations.models import State, Country, City
+>>> Country.objects.bulk_create([
+...     Country(name="USA", country_code="US", curr_symbol="$", phone_code="+1"),
+...     Country(name="UK", country_code="GB", curr_symbol="£", phone_code="+44"),
+... ])
+[<Country: USA (US)>, <Country: UK (GB)>]
+>>> usa = Country.objects.get(name="USA")
+>>> uk = Country.objects.get(name="UK")
+>>> usa
+<Country: USA (US)>
+>>> uk
+<Country: UK (GB)>
+>>> # states
+>>> State.objects.bulk_create([
+...     State(name="California", state_code="CA", gst_code="07", country=usa),
+...     State(name="Texas", state_code="TX", gst_code="08", country=usa),
+...     State(name="England", state_code="ENG", gst_code="01", country=uk),
+... ])
+[<State: California (CA) in USA>, <State: Texas (TX) in USA>, <State: England (ENG) in UK>]
+>>> california = State.objects.get(name="California")
+>>>     
+>>> # cities
+>>> City.objects.bulk_create([
+...     City(
+...         name="Los Angeles", city_code="LA", phone_code="213", population=4000000,
+...         avg_age=34.2, num_of_adult_males=1900000, num_of_adult_females=2000000, state=california
+...     ),
+...     City(
+...         name="San Francisco", city_code="SF", phone_code="415", population=900000,
+...         avg_age=36.7, num_of_adult_males=450000, num_of_adult_females=440000, state=california
+...     )
+... ])
+[<City: Los Angeles (LA) in California, USA>, <City: San Francisco (SF) in California, USA>]
+>>>

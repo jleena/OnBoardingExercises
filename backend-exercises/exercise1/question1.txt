@@ -1,0 +1,46 @@
+PS C:\Users\LeenaSanjanaJulakant\Documents\projects\onboardingExercises\backend-exercises\exercise1\backend> python manage.py shell
+9 objects imported automatically (use -v 2 for details).
+
+Python 3.13.5 (tags/v3.13.5:6cb20a2, Jun 11 2025, 16:15:46) [MSC v.1943 64 bit (AMD64)] on win32
+Type "help", "copyright", "credits" or "license" for more information.
+(InteractiveConsole)
+>>> from Locations.models import Country, State, City
+>>> Country.objects.create(name="India", country_code="IN", curr_symbol="₹", phone_code="+91")
+<Country: India (IN)>
+>>> countries = Country.objects.all()                                 
+>>> countries
+Python 3.13.5 (tags/v3.13.5:6cb20a2, Jun 11 2025, 16:15:46) [MSC v.1943 64 bit (AMD64)] on win32
+Type "help", "copyright", "credits" or "license" for more information.
+(InteractiveConsole)
+>>> from Locations.models import Country, State, City
+>>> Country.objects.create(name="India", country_code="IN", curr_symbol="₹", phone_code="+91")
+<Country: India (IN)>
+>>> countries = Country.objects.all()
+>>> countries
+>>> from Locations.models import Country, State, City
+>>> Country.objects.create(name="India", country_code="IN", curr_symbol="₹", phone_code="+91")
+<Country: India (IN)>
+>>> countries = Country.objects.all()
+>>> countries
+<Country: India (IN)>
+>>> countries = Country.objects.all()
+>>> countries
+>>> countries
+<QuerySet [<Country: India (IN)>]>
+>>> india = countries[0]
+>>> india
+<Country: India (IN)>
+>>> State.objects.create(name="Gujarat", state_code="GJ", gst_code="24", country=india)
+>>> india = countries[0]
+>>> india
+<Country: India (IN)>
+>>> State.objects.create(name="Gujarat", state_code="GJ", gst_code="24", country=india)
+>>> State.objects.create(name="Gujarat", state_code="GJ", gst_code="24", country=india)
+<State: Gujarat (GJ) in India>
+>>> gujarat = State.objects.get(name__iexact="gujarat")
+>>> gujarat
+<State: Gujarat (GJ) in India>
+>>> city = City.objects.create(name="Hyderabad", city_code="675", phone_code="+91", population=1000000, avg_age=40.00, num_of_adult_males=500000, num_of_adult_females=500000, state=gujarat)
+>>> city
+<City: Hyderabad (675) in Gujarat, India>
+>>> 

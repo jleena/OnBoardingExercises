@@ -1,0 +1,57 @@
+PS C:\Users\LeenaSanjanaJulakant\Documents\projects\onboardingExercises\backend-exercises\exercise1\backend> python manage.py shell
+9 objects imported automatically (use -v 2 for details).
+
+Python 3.13.5 (tags/v3.13.5:6cb20a2, Jun 11 2025, 16:15:46) [MSC v.1943 64 bit (AMD64)] on win32
+Type "help", "copyright", "credits" or "license" for more information.
+(InteractiveConsole)
+>>> countries = Country.objects.all()
+>>> for country in countries:
+...     country.phone_code = "+000"  # placeholder
+... Country.objects.bulk_update(countries, ['phone_code'])
+  File "<console>", line 3
+    Country.objects.bulk_update(countries, ['phone_code'])
+    ^^^^^^^
+SyntaxError: invalid syntax
+>>> for country in countries: 
+...     country.phone_code="+000"
+... 
+>>> Country.objects.bulk_update(countries, ['phone_code'])
+3
+>>> for country in countries:
+...     print(country.phone_code)
+... 
++000
++000
++000
+>>> # states
+>>> states = State.objects.all()
+>>> for state in states:
+...     state.gst_code = "99"
+... 
+>>> State.objects.bulk_update(states, ["gst_code"])
+4
+>>> for state in states:
+...     print(state.gst_code)
+... 
+99
+99
+99
+99
+>>> # cities
+>>> cities = City.objects.all()
+>>> for city in cities:
+...     print(city.population)
+...     city.population += 1000
+... 
+1000000
+4000000
+900000
+>>> City.objects.bulk_update(cities, ['population'])
+3
+>>> for city in cities:
+...     print(city.population)
+... 
+1001000
+4001000
+901000
+>>>
