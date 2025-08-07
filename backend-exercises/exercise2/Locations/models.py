@@ -12,6 +12,12 @@ class Country(models.Model):
     curr_symbol: str = models.CharField(max_length=10)
     phone_code: str = models.CharField(max_length=10)
 
+    my_user = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+        related_name="user_countries"
+    )
+
     def __str__(self) -> str:
         return f"{self.name} ({self.country_code})"
     
