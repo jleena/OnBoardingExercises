@@ -1,8 +1,11 @@
 from django.shortcuts import render
 from django.conf import settings
-from .serializers import CountrySerializer, StateSerializer, CitySerializer
+from .serializers import CountrySerializer, StateSerializer, CitySerializer, CountryNestedCreateSerializer
 from .models import Country, State, City
 from rest_framework import generics, permissions
+import rest_framework.status as status
+from rest_framework.views import APIView
+from rest_framework.response import Response
 
 # Create your views here.
 class CountryListCreateView(generics.ListCreateAPIView):
@@ -56,4 +59,11 @@ class CityDetailView(generics.RetrieveUpdateDestroyAPIView):
         return City.objects.filter(
             state__country__my_user=self.request.user
         )
-    
+
+class LocationCreateView(APIView):
+    def post(self, request):
+        serializer = CountryNestedCreateSerializer(data=request.data, context={'request': request})
+        if serializer.is_valid():
+            country = serializer.save()
+            return Response({'message': 'Location created successfully', 'country_id': str(country.id)})
+        return Response(serializer.errors, status=400)

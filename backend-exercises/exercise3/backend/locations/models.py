@@ -2,6 +2,7 @@ from django.db import models
 from django.conf import settings
 import uuid
 from django.core.exceptions import ValidationError
+from django.utils import timezone
 
 
 class Country(models.Model):
@@ -10,6 +11,7 @@ class Country(models.Model):
     country_code = models.CharField(max_length=10, unique=True)
     curr_symbol = models.CharField(max_length=10)
     phone_code = models.CharField(max_length=10, unique=True)
+    created = models.DateTimeField(default=timezone.now)
 
     my_user = models.ForeignKey(
         settings.AUTH_USER_MODEL,
@@ -29,6 +31,7 @@ class State(models.Model):
     name = models.CharField(max_length=100)
     state_code = models.CharField(max_length=10, unique=True)
     gst_code = models.CharField(max_length=15, blank=True, null=True, unique=True)
+    created = models.DateTimeField(default=timezone.now)
 
     country = models.ForeignKey(
         Country,
@@ -53,6 +56,7 @@ class City(models.Model):
     name = models.CharField(max_length=100)
     city_code = models.CharField(max_length=10)
     phone_code = models.CharField(max_length=10, unique=True)
+    created = models.DateTimeField(default=timezone.now)
 
     population = models.PositiveIntegerField()
     avg_age = models.FloatField()

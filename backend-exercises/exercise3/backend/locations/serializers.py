@@ -12,8 +12,21 @@ class CountrySerializer(serializers.ModelSerializer):
         validated_data['my_user'] = self.context['request'].user
         return super().create(validated_data)
     
+
+class StateSerializer(serializers.ModelSerializer):
+    country__name = serializers.CharField(source='country.name', read_only=True)
+    country__my_user__name = serializers.CharField(source='country.my_user.name', read_only=True)
+
+    class Meta:
+        model = State
+        fields = [
+            'id', 'name', 'state_code', 'gst_code', 'country',
+            'country__name', 'country__my_user__name'
+        ]
+        read_only_fields = ['id', 'country__name', 'country__my_user__name']
+
 class CitySerializer(serializers.ModelSerializer):
-    my_state__name = serializers.CharField(source='state.name', read_only=True)
+    state__name = serializers.CharField(source='state.name', read_only=True)
 
     class Meta:
         model = City
@@ -33,18 +46,49 @@ class CitySerializer(serializers.ModelSerializer):
         if population is not None and population <= (males + females):
             raise serializers.ValidationError("Population must be greater than or equal to the number of adult males + females.")
         return data
+    
+# for CRUD operations with nested serializers on Country-State-City
+class CityCreateSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = City
+        exclude = ['id', 'state']
 
-class StateSerializer(serializers.ModelSerializer):
-    my_country__name = serializers.CharField(source='country.name', read_only=True)
-    my_country__my_user__name = serializers.CharField(source='country.my_user.name', read_only=True)
+class StateCreateSerializer(serializers.ModelSerializer):
+    cities = CityCreateSerializer(many=True)
 
     class Meta:
         model = State
-        fields = [
-            'id', 'name', 'state_code', 'gst_code', 'country',
-            'country__name', 'country__my_user__name'
-        ]
-        read_only_fields = ['id', 'country__name', 'country__my_user__name']
+        exclude = ['id', 'country']
+
+class CountryNestedCreateSerializer(serializers.ModelSerializer):
+    states = StateCreateSerializer(many=True)
+
+    class Meta:
+        model = Country
+        exclude = ['id', 'my_user']
+
+    def create(self, validated_data):
+        states_data = validated_data.pop('states')
+        validated_data['my_user'] = self.context['request'].user
+        country, _ = Country.objects.get_or_create(**validated_data)
+
+        for state_data in states_data:
+            cities_data = state_data.pop('cities')
+            state, _ = State.objects.get_or_create(country=country, **state_data)
+            for city_data in cities_data:
+                City.objects.get_or_create(state=state, **city_data)
+
+        return country
+
+    def create(self, validated_data):
+        countries_data = validated_data.pop('countries')
+        for country_data in countries_data:
+            serializer = CountryNestedCreateSerializer(data=country_data, context=self.context)
+            if serializer.is_valid():
+                serializer.save()
+            else:
+                raise serializers.ValidationError(serializer.errors)
+        return {'message': 'Locations created successfully'}
 
 class MyUserSerializer(serializers.ModelSerializer):
     class Meta:
