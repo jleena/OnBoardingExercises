@@ -78,6 +78,7 @@ class City(models.Model):
         ]
 
     def clean(self):
+        super().clean()
         if self.population <= (self.num_of_adult_males + self.num_of_adult_females):
             raise ValidationError("Population must be greater than total adult males and females.")
 
