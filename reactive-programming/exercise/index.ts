@@ -23,3 +23,9 @@ function randomCar(): Car {
     color: colors[Math.floor(Math.random() * colors.length)],
   };
 }
+
+const observable1 = new Observable<Car>(subscriber => {
+    const interval = setInterval(() => {
+        subscriber.next(randomCar());
+    }, 1000);
+})
