@@ -2,6 +2,21 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 var rxjs_1 = require("rxjs");
 var operators_1 = require("rxjs/operators");
+var axios_1 = require("axios");
+function apiCall() {
+    return new rxjs_1.Observable(function (subscriber) {
+        axios_1.default.get('https://jsonplaceholder.typicode.com/users')
+            .then(function (response) {
+            setTimeout(function () {
+                subscriber.next(response.data);
+                subscriber.complete();
+            }, 500);
+        })
+            .catch(function (error) {
+            subscriber.error(error);
+        });
+    });
+}
 function randomCar() {
     var names = ['Speedster', 'Roadster', 'Cruiser', 'Phantom', 'Falcon'];
     var models = ['X1', 'GT', 'Turbo', 'Z', 'RS'];
@@ -29,6 +44,17 @@ var observable3 = observable2.pipe((0, operators_1.map)(function (car) {
         yearOfRelease: car.yearOfRelease,
     };
 }));
+// Create an Observable4 which makes an api call to a free service every second. Ex. https://random-data-api.com/documentation (Hint: Use ‘switchMap’ operator) 
+var observable4 = (0, rxjs_1.interval)(1000).pipe((0, operators_1.switchMap)(function () { return apiCall(); }), (0, operators_1.map)(function (data) {
+    return data.map(function (user) { return ({
+        name: user.name
+    }); });
+}));
+var observable5 = (0, rxjs_1.interval)(500).pipe((0, operators_1.concatMap)(function () { return apiCall(); }), (0, operators_1.map)(function (data) {
+    return data.map(function (user) { return ({
+        name: user.name
+    }); });
+}));
 var carObserver = {
     next: function (car) {
         console.log(car);
@@ -51,4 +77,8 @@ var scrapObserver = {
         console.log('Completed');
     }
 };
-observable3.subscribe(scrapObserver);
+// observable1.subscribe(carObserver);
+// observable2.subscribe(carObserver);
+// observable3.subscribe(scrapObserver);
+observable4.subscribe(function (data) { return console.log(data); });
+// observable5.subscribe(data => console.log(data));

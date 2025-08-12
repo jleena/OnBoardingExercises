@@ -1,5 +1,6 @@
-import { Observable, Subject } from 'rxjs';
-import { map, filter } from 'rxjs/operators';
+import { Observable, concat, interval } from 'rxjs';
+import { map, filter, switchMap, concatMap, take } from 'rxjs/operators';
+import axios from 'axios';
 
 interface Car {
     name: string;
@@ -12,6 +13,21 @@ interface Car {
 interface Scrap {
     brand: string,
     yearOfRelease: number
+}
+
+function apiCall(): Observable<any> {
+    return new Observable(subscriber => {
+        axios.get('https://jsonplaceholder.typicode.com/users')
+            .then(response => {
+                setTimeout(() => {
+                    subscriber.next(response.data);
+                    subscriber.complete();
+                }, 1000);
+            })
+            .catch(error => {
+                subscriber.error(error);
+            })
+    })
 }
 
 function randomCar(): Car {
@@ -51,6 +67,26 @@ const observable3 = observable2.pipe(
     })
 );
 
+// Create an Observable4 which makes an api call to a free service every second. Ex. https://random-data-api.com/documentation (Hint: Use ‘switchMap’ operator) 
+
+const observable4 = interval(1000).pipe(
+    switchMap(() => apiCall()),
+    map(data => {
+        return data.map((user: any) => ({
+            name: user.name
+        }));
+    }
+    ));
+
+const observable5 = interval(500).pipe(
+    concatMap(() => apiCall()),
+    map(data => {
+        return data.map((user: any) => ({
+            name: user.name
+        }));
+    })
+    );
+
 const carObserver = {
     next: (car: Car) => {
         console.log(car);
@@ -74,4 +110,8 @@ const scrapObserver = {
     }
 };
 
-observable3.subscribe(scrapObserver);
+// observable1.subscribe(carObserver);
+// observable2.subscribe(carObserver);
+// observable3.subscribe(scrapObserver);
+observable4.subscribe(data => console.log(data));
+observable5.subscribe(data => console.log(data));
