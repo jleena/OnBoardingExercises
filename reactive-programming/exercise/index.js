@@ -1,6 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 var rxjs_1 = require("rxjs");
+var operators_1 = require("rxjs/operators");
 function randomCar() {
     var names = ['Speedster', 'Roadster', 'Cruiser', 'Phantom', 'Falcon'];
     var models = ['X1', 'GT', 'Turbo', 'Z', 'RS'];
@@ -9,26 +10,28 @@ function randomCar() {
     return {
         name: names[Math.floor(Math.random() * names.length)],
         model: models[Math.floor(Math.random() * models.length)],
-        yearOfRelease: 2000 + Math.floor(Math.random() * 25),
+        yearOfRelease: 1975 + Math.floor(Math.random() * 51),
         brand: brands[Math.floor(Math.random() * brands.length)],
         color: colors[Math.floor(Math.random() * colors.length)],
     };
 }
-// Create an Observable1 which emits a new car every Interval of 1s. (using the previous function)
 var observable1 = new rxjs_1.Observable(function (subscriber) {
     var interval = setInterval(function () {
         subscriber.next(randomCar());
     }, 1000);
 });
-var Observer = {
-    next: function (value) {
-        console.log("New car emitted: ".concat(JSON.stringify(value)));
+var observable2 = observable1.pipe((0, operators_1.filter)(function (car) { return car.color === 'black' && car.yearOfRelease < 2000; }), (0, operators_1.map)(function (car) {
+    return car;
+}));
+var observer = {
+    next: function (car) {
+        console.log(car);
     },
     error: function (err) {
-        console.error("Error occurred: ".concat(err));
+        console.error('Error:', err);
     },
     complete: function () {
-        console.log('Observable completed');
+        console.log('Completed');
     }
 };
-observable1.subscribe(Observer);
+observable2.subscribe(observer);
