@@ -9,6 +9,11 @@ interface Car {
     color: string;
 }
 
+interface Scrap {
+    brand: string,
+    yearOfRelease: number
+}
+
 function randomCar(): Car {
   const names = ['Speedster', 'Roadster', 'Cruiser', 'Phantom', 'Falcon'];
   const models = ['X1', 'GT', 'Turbo', 'Z', 'RS'];
@@ -37,7 +42,16 @@ const observable2 = observable1.pipe(
     })
 );
 
-const observer = {
+const observable3 = observable2.pipe(
+    map(car => {
+        return {
+            brand: car.brand,
+            yearOfRelease: car.yearOfRelease,
+        };
+    })
+);
+
+const carObserver = {
     next: (car: Car) => {
         console.log(car);
     },
@@ -48,5 +62,16 @@ const observer = {
         console.log('Completed');
     }
 }
+const scrapObserver = {
+    next: (scrap: Scrap) => {
+        console.log(scrap);
+    },
+    error: (err: any) => {
+        console.error('Error:', err);
+    },
+    complete: () => {
+        console.log('Completed');
+    }
+};
 
-observable2.subscribe(observer);
+observable3.subscribe(scrapObserver);

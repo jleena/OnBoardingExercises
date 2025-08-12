@@ -23,7 +23,13 @@ var observable1 = new rxjs_1.Observable(function (subscriber) {
 var observable2 = observable1.pipe((0, operators_1.filter)(function (car) { return car.color === 'black' && car.yearOfRelease < 2000; }), (0, operators_1.map)(function (car) {
     return car;
 }));
-var observer = {
+var observable3 = observable2.pipe((0, operators_1.map)(function (car) {
+    return {
+        brand: car.brand,
+        yearOfRelease: car.yearOfRelease,
+    };
+}));
+var carObserver = {
     next: function (car) {
         console.log(car);
     },
@@ -34,4 +40,15 @@ var observer = {
         console.log('Completed');
     }
 };
-observable2.subscribe(observer);
+var scrapObserver = {
+    next: function (scrap) {
+        console.log(scrap);
+    },
+    error: function (err) {
+        console.error('Error:', err);
+    },
+    complete: function () {
+        console.log('Completed');
+    }
+};
+observable3.subscribe(scrapObserver);
