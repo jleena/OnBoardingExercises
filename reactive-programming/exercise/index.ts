@@ -1,5 +1,5 @@
 import { Observable, concat, interval } from 'rxjs';
-import { map, filter, switchMap, concatMap, take } from 'rxjs/operators';
+import { map, filter, switchMap, concatMap, take, mergeMap } from 'rxjs/operators';
 import axios from 'axios';
 
 interface Car {
@@ -78,7 +78,7 @@ const observable4 = interval(1000).pipe(
     }
     ));
 
-const observable5 = interval(500).pipe(
+const observable5 = interval(100).pipe(
     concatMap(() => apiCall()),
     map(data => {
         return data.map((user: any) => ({
@@ -86,6 +86,16 @@ const observable5 = interval(500).pipe(
         }));
     })
     );
+
+const observable6 = interval(50).pipe(
+    mergeMap(() => apiCall()),
+    take(5),
+    map(data => {
+        return data.map((user: any) => ({
+            name: user.name
+        }));
+    })
+)
 
 const carObserver = {
     next: (car: Car) => {
@@ -113,5 +123,6 @@ const scrapObserver = {
 // observable1.subscribe(carObserver);
 // observable2.subscribe(carObserver);
 // observable3.subscribe(scrapObserver);
-observable4.subscribe(data => console.log(data));
-observable5.subscribe(data => console.log(data));
+// observable4.subscribe(data => console.log(data));
+// observable5.subscribe(data => console.log(data));
+observable6.subscribe(data => console.log(data));

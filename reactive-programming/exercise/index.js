@@ -10,7 +10,7 @@ function apiCall() {
             setTimeout(function () {
                 subscriber.next(response.data);
                 subscriber.complete();
-            }, 500);
+            }, 1000);
         })
             .catch(function (error) {
             subscriber.error(error);
@@ -50,7 +50,12 @@ var observable4 = (0, rxjs_1.interval)(1000).pipe((0, operators_1.switchMap)(fun
         name: user.name
     }); });
 }));
-var observable5 = (0, rxjs_1.interval)(500).pipe((0, operators_1.concatMap)(function () { return apiCall(); }), (0, operators_1.map)(function (data) {
+var observable5 = (0, rxjs_1.interval)(100).pipe((0, operators_1.concatMap)(function () { return apiCall(); }), (0, operators_1.map)(function (data) {
+    return data.map(function (user) { return ({
+        name: user.name
+    }); });
+}));
+var observable6 = (0, rxjs_1.interval)(50).pipe((0, operators_1.mergeMap)(function () { return apiCall(); }), (0, operators_1.take)(5), (0, operators_1.map)(function (data) {
     return data.map(function (user) { return ({
         name: user.name
     }); });
@@ -80,5 +85,6 @@ var scrapObserver = {
 // observable1.subscribe(carObserver);
 // observable2.subscribe(carObserver);
 // observable3.subscribe(scrapObserver);
-observable4.subscribe(function (data) { return console.log(data); });
+// observable4.subscribe(data => console.log(data));
 // observable5.subscribe(data => console.log(data));
+observable6.subscribe(function (data) { return console.log(data); });
