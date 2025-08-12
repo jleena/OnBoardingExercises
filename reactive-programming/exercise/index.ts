@@ -36,3 +36,17 @@ const observable2 = observable1.pipe(
         return car;
     })
 );
+
+const observer = {
+    next: (car: Car) => {
+        console.log(car);
+    },
+    error: (err: any) => {
+        console.error('Error:', err);
+    },
+    complete: () => {
+        console.log('Completed');
+    }
+}
+
+observable2.subscribe(observer);
