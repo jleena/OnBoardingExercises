@@ -67,8 +67,6 @@ const observable3 = observable2.pipe(
     })
 );
 
-// Create an Observable4 which makes an api call to a free service every second. Ex. https://random-data-api.com/documentation (Hint: Use ‘switchMap’ operator) 
-
 const observable4 = interval(1000).pipe(
     switchMap(() => apiCall()),
     map(data => {

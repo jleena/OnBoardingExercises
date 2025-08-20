@@ -13,7 +13,7 @@ class CountryListCreateView(generics.ListCreateAPIView):
     permission_classes = [permissions.IsAuthenticated]
 
     def get_queryset(self):
-        return Country.objects.filter(my_user=self.request.user)
+        return Country.objects.filter(my_user=self.request.user).select_related('my_user')
     def perform_create(self, serializer):
         serializer.save(my_user=self.request.user)
 
@@ -22,7 +22,7 @@ class CountryDetailView(generics.RetrieveUpdateDestroyAPIView):
     permission_classes = [permissions.IsAuthenticated]
 
     def get_queryset(self):
-        return Country.objects.filter(my_user=self.request.user)
+        return Country.objects.filter(my_user=self.request.user).select_related('my_user')
 
 class StateListCreateView(generics.ListCreateAPIView):
     serializer_class = StateSerializer
@@ -31,7 +31,7 @@ class StateListCreateView(generics.ListCreateAPIView):
     def get_queryset(self):
         return State.objects.filter(
             country__my_user=self.request.user
-        )
+        ).select_related('country', 'country__my_user')
 
 class StateDetailView(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = StateSerializer
@@ -40,7 +40,7 @@ class StateDetailView(generics.RetrieveUpdateDestroyAPIView):
     def get_queryset(self):
         return State.objects.filter(
             country__my_user=self.request.user
-        )
+        ).select_related("country", "country__my_user")
 
 class CityListCreateView(generics.ListCreateAPIView):
     serializer_class = CitySerializer
@@ -49,7 +49,7 @@ class CityListCreateView(generics.ListCreateAPIView):
     def get_queryset(self):
         return City.objects.filter(
             state__country__my_user=self.request.user
-        )
+        ).select_related("state", "state__country", "state__country__my_user")
 
 class CityDetailView(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = CitySerializer
@@ -58,7 +58,7 @@ class CityDetailView(generics.RetrieveUpdateDestroyAPIView):
     def get_queryset(self):
         return City.objects.filter(
             state__country__my_user=self.request.user
-        )
+        ).select_related("state", "state__country", "state__country__my_user")
 
 class LocationCreateView(APIView):
     def post(self, request):
